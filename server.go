@@ -8,9 +8,26 @@ import (
 	"log"
 	"net/http"
 )
-type Dato struct {
+type Tienda struct {
 	Nombre string
+	Descripcion string
+	Contacto string
+	Calificacion int
 }
+type Departamento struct {
+	Nombre string
+	Tiendas []Tienda
+}
+
+type Dato struct {
+	Indice string
+	Departamentos []Departamento
+}
+
+type Sobre struct {
+	Datos []Dato
+}
+
 func main() {
 	request()
 }
@@ -20,7 +37,6 @@ func request(){
 	ruta.HandleFunc("/", home)
 	ruta.HandleFunc("/getArreglo",getArreglo).Methods("GET")//se quedara esperando una respuesta, si no la tiene dara error
 	ruta.HandleFunc("/metodopost", metodopost).Methods("POST")//no se queda esperando una respuesta, solo mandamos informacion
-
 	log.Fatal(http.ListenAndServe(":3000",ruta))
 
 }
@@ -34,7 +50,7 @@ func getArreglo(w http.ResponseWriter, r *http.Request)  {
 }
 func metodopost(w http.ResponseWriter, r *http.Request){
 	body, _ := ioutil.ReadAll(r.Body)
-	var re Dato
+	var re Sobre
 	json.Unmarshal(body, &re)
 	fmt.Println(re)
 }
