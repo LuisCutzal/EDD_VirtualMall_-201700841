@@ -114,14 +114,13 @@ func Recorrido()  {
 
 
 		/*
+		crear primero una matriz para el indice (filas) y departamentos(columnas)
+		luego llenar la lista dobremente enlazada con la informacion
+		correspondiente de las tiendas por medio de la calificacion
+		la lista de las tiendas va ordenada
 
-
-		ver la lista que tenga en lugar de strings sea tipo matriz o lista
-
-
-
-
-		*/
+		cada 20 posiciones en la matriz (indice * departamentos) creamos una imagen
+				*/
 		for _,recorrido2:=range recorrido.Departamentos{
 			fmt.Println("Departamento:",recorrido2.Nombre)
 			for _,recorrido3:=range recorrido2.Tiendas{
