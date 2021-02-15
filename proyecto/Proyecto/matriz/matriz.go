@@ -35,8 +35,17 @@ func NodoLista(header int) *nodo  {
 	return &nodo{nil,nil,nil,nil,nil,nil,nil,header,nil,nil}
 }
 
-//para setear
+func NuevaLista() *lista {
+	return &lista{nil,nil}
+}
 
+//constructor para la matriz
+func NuevaMatriz() *Matriz  {
+	return &Matriz{NuevaLista(),NuevaLista()}
+}
+
+
+//para setear
 func (n *nodo) HeaderX() int {
 	return n.x
 }
@@ -103,4 +112,44 @@ func (l *lista) Imprimir()  {
 		fmt.Println("Cabecera: ",temporal.header)
 		temporal=temporal.siguiente
 	}
+}
+
+func (m *Matriz) Insertar(producto *Product,x int,y int)  {
+	horizontal:=m.list_H.Buscar(x)
+	v:=m.list_V.Buscar(y)
+	if horizontal==nil && v==nil{
+		m.NoExiste(producto,x,y)
+	}else if horizontal==nil && v!=nil{
+		m.ExisteVertical(producto,x,y)
+	}else if horizontal!=nil && v==nil{
+		m.ExisteHorizontal(producto,x,y)
+	}else{
+		m.Existe(producto,x,y)
+	}
+
+}
+
+func (m *Matriz)NoExiste(producto *Product, x int, y int) {
+	m.list_H.Insertar(x) //insertamos en la lista que emula la cabecera horizontal
+	m.list_V.Insertar(y) //insertamos en la lista que emula la cabecera vertical
+	h:=m.list_H.Buscar(x)//buscamos el nodo que acabamos de incertar para poder enlasar
+	v:=m.list_V.Buscar(y)
+
+	nuevo:=NodoMatriz(x,y,producto) //creamos nuevo nodo tipo matriz
+	h.abajo=nuevo//enlazamos el nodo horizontal hacia abajo
+	nuevo.arriba=h //enlazamos el nuevo nodo hacia arriba
+	v.derecho=nuevo //enlazamos el nodo vertical hacia la derecha
+	nuevo.izquierdo=v //enlazamos el nuevo nodo hacia la izquierda
+}
+
+func (m *Matriz) ExisteVertical(producto *Product, x int, y int) {
+	
+}
+
+func (m *Matriz) ExisteHorizontal(producto *Product, x int, y int) {
+
+}
+
+func (m *Matriz) Existe(producto *Product, x int, y int) {
+	
 }

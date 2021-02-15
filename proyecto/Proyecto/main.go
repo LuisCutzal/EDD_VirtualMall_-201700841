@@ -2,7 +2,7 @@ package main
 
 import (
 	"./servidor"
-)
+	)
 func main() {
 	/*
 	lis:=lista.NuevaLista()
