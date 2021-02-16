@@ -2,13 +2,14 @@ package servidor
 //package main
 
 import (
+	"../lista"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"../lista"
+	"../ll"
 )
 
 type Tienda struct {
@@ -57,7 +58,7 @@ func MetodoPost(w http.ResponseWriter, r *http.Request) {
 		Recorrido()
 	}
 	json.NewEncoder(w).Encode(re) //mostrá los datos en postman
-
+	Recorrido()
 }
 
 func GetArreglo(w http.ResponseWriter, r *http.Request) {
@@ -75,7 +76,9 @@ func GetArreglo(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprint(w, "[1,2,3,4,5]") // lo q tenemos que mandar esta en formato json
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(re)
+
 	//for _,recorrido:=range re.Datos{
+
 		//json.NewEncoder(w).Encode(recorrido)
 		/*
 		//fmt.Println("Indice:",recorrido.Indice)
@@ -106,11 +109,18 @@ func GetArreglo(w http.ResponseWriter, r *http.Request) {
 }
 
 func Recorrido()  {
-	lis:=lista.NuevaLista()
+	lisVertical:=lista.NuevaLista()
+	lisHorizontal:=lista.NuevaLista()
+	otro:=ll.NuevaLista()
+	//ma:=matriz.NuevaMatriz() //tengo que agregar lista 1 y lista 2
+	//li:=matriz.NuevaLista() //la lista es para agregar horizontal y vertical
+
 	for _,recorrido:=range re.Datos{
-		fmt.Println("Indice:",recorrido.Indice)
-		lis.Insertar(recorrido.Indice)
-		lis.Imprimir()
+		//fmt.Println("Indice:",recorrido.Indice)
+		lisVertical.Insertar(recorrido.Indice)
+
+
+
 
 
 		/*
@@ -121,17 +131,33 @@ func Recorrido()  {
 
 		cada 20 posiciones en la matriz (indice * departamentos) creamos una imagen
 				*/
+
 		for _,recorrido2:=range recorrido.Departamentos{
-			fmt.Println("Departamento:",recorrido2.Nombre)
-			for _,recorrido3:=range recorrido2.Tiendas{
-				fmt.Println("Nombre de la Tienda:",recorrido3.Nombre)
-				fmt.Println("Descripcion:",recorrido3.Descripcion)
-				fmt.Println("Contacto:",recorrido3.Contacto)
-				fmt.Println("Calificacion:",recorrido3.Calificacion)
+			//fmt.Println("Departamento:",recorrido2.Nombre)
+
+			for index,recorrido3:=range recorrido2.Tiendas{
+				//fmt.Println("Nombre de la Tienda:",recorrido3.Nombre)
+				//fmt.Println("Descripcion:",recorrido3.Descripcion)
+				//fmt.Println("Contacto:",recorrido3.Contacto)
+				//fmt.Println("Calificacion:",recorrido3.Calificacion)
+				//
 				//fmt.Println("Tipo de dato de calificacion:",reflect.TypeOf(recorrido3.Calificacion))
+
+
+				fmt.Println("Lista de listas")
+				otro.InsertarListaListas(index,recorrido3.Nombre)
+				//otro.Print()
 			}
+			fmt.Println("Horizontal")
+			lisHorizontal.Insertar(recorrido2.Nombre)
+			lisHorizontal.Imprimir()
 		}
+
 	}
+	fmt.Println("Vertical")
+	//lisVertical.Imprimir()
+
+	//li.Imprimir()
 }
 
 func MetodoBusqueda(w http.ResponseWriter,r *http.Request){

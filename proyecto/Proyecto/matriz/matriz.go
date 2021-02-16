@@ -4,8 +4,10 @@ import ("fmt")
 
 type Product struct {
 	Nombre string//Indice
-	Codigo int // Departamentos puede que cambie a int
+	Calificacion int // Departamentos puede que cambie a int
 	Descripcion string //datos
+
+
 }
 
 type nodo struct {
@@ -27,12 +29,12 @@ type Matriz struct {
 
 //creamos un constructor para una nueva matriz
 func NodoMatriz(x int ,y int, matriz *Product)*nodo  {
-	return &nodo{x,y,matriz,nil,nil,nil,nil,nil,nil,nil}
+	return &nodo{x,y,matriz,nil,nil,nil,nil,0,nil,nil}
 
 }
 //constructor para la lista de listas
 func NodoLista(header int) *nodo  {
-	return &nodo{nil,nil,nil,nil,nil,nil,nil,header,nil,nil}
+	return &nodo{0,0,nil,nil,nil,nil,nil,header,nil,nil}
 }
 
 func NuevaLista() *lista {
@@ -114,7 +116,7 @@ func (l *lista) Imprimir()  {
 	}
 }
 
-func (m *Matriz) Insertar(producto *Product,x int,y int)  {
+func (m *Matriz) Insertar2(producto *Product,x int,y int)  {
 	horizontal:=m.list_H.Buscar(x)
 	v:=m.list_V.Buscar(y)
 	if horizontal==nil && v==nil{

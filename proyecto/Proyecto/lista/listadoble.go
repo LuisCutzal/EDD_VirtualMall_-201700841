@@ -16,6 +16,7 @@ func NuevaLista() *Lista  {
 	return &Lista{nil,nil,0}
 }
 
+
 //insertar un nodo
 func (m *Lista) Insertar(dato string)  {
 	nuevo := &nodo{nil,nil,dato}
