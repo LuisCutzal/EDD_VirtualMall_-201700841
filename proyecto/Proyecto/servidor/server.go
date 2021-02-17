@@ -2,14 +2,13 @@ package servidor
 //package main
 
 import (
-	"../lista"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"../ll"
+	matriz "../matriz"
 )
 
 type Tienda struct {
@@ -20,7 +19,7 @@ type Tienda struct {
 }
 type Departamento struct {
 	Nombre  string `json:Nombre`
-	Tiendas []Tienda `json:Tiendas`
+	Tiendas []Tienda`json:Tiendas`
 }
 type Dato struct {
 	Indice string `json:Indice`
@@ -50,14 +49,16 @@ func Home(w http.ResponseWriter, r *http.Request) {
 var re Sobre
 
 func MetodoPost(w http.ResponseWriter, r *http.Request) {
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err !=nil{
 		fmt.Fprintf(w,"Error al cargar el archivo")
 	}else{
 		json.Unmarshal(body, &re)
-		Recorrido()
+		//Recorrido()
 	}
 	json.NewEncoder(w).Encode(re) //mostrá los datos en postman
+
 	Recorrido()
 }
 
@@ -77,6 +78,14 @@ func GetArreglo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(re)
 
+	fmt.Println("Tiendas")
+
+
+	fmt.Println("Departamentos")
+	ListaX.Imprimir()
+
+	fmt.Println("indice")
+	ListaY.Imprimir()
 	//for _,recorrido:=range re.Datos{
 
 		//json.NewEncoder(w).Encode(recorrido)
@@ -108,56 +117,41 @@ func GetArreglo(w http.ResponseWriter, r *http.Request) {
 	Recorrido()
 }
 
+var ListaY =matriz.NuevaLista()
+var ListaX =matriz.NuevaLista()
+var MatrizDatos=matriz.NuevaMatriz()
+
 func Recorrido()  {
-	lisVertical:=lista.NuevaLista()
-	lisHorizontal:=lista.NuevaLista()
-	otro:=ll.NuevaLista()
-	//ma:=matriz.NuevaMatriz() //tengo que agregar lista 1 y lista 2
-	//li:=matriz.NuevaLista() //la lista es para agregar horizontal y vertical
-
-	for _,recorrido:=range re.Datos{
-		//fmt.Println("Indice:",recorrido.Indice)
-		lisVertical.Insertar(recorrido.Indice)
-
-
-
-
-
-		/*
+	/*
 		crear primero una matriz para el indice (filas) y departamentos(columnas)
 		luego llenar la lista dobremente enlazada con la informacion
 		correspondiente de las tiendas por medio de la calificacion
 		la lista de las tiendas va ordenada
 
 		cada 20 posiciones en la matriz (indice * departamentos) creamos una imagen
-				*/
+	*/
 
-		for _,recorrido2:=range recorrido.Departamentos{
-			//fmt.Println("Departamento:",recorrido2.Nombre)
+	for indiceY,recorroY:=range re.Datos{
+		ListaY.Insertar(indiceY)
+		for indiceX,recorroX:=range recorroY.Departamentos{
+			ListaX.Insertar(indiceX)
+			for _,recorroMatriz:=range recorroX.Tiendas{
+				//var pro = recorroMatriz.Nombre
+				//MatrizDatos.Insertar(matriz.Product{recorroMatriz.Nombre,recorroMatriz.Descripcion,recorroMatriz.Contacto,recorroMatriz.Calificacion},indiceX,indiceY)
+				//fmt.Println(recorroX.Nombre)
+				fmt.Println(recorroMatriz)
+				//linealizacion
+				fmt.Println("************************")
 
-			for index,recorrido3:=range recorrido2.Tiendas{
-				//fmt.Println("Nombre de la Tienda:",recorrido3.Nombre)
-				//fmt.Println("Descripcion:",recorrido3.Descripcion)
-				//fmt.Println("Contacto:",recorrido3.Contacto)
-				//fmt.Println("Calificacion:",recorrido3.Calificacion)
-				//
-				//fmt.Println("Tipo de dato de calificacion:",reflect.TypeOf(recorrido3.Calificacion))
 
 
-				fmt.Println("Lista de listas")
-				otro.InsertarListaListas(index,recorrido3.Nombre)
-				//otro.Print()
 			}
-			fmt.Println("Horizontal")
-			lisHorizontal.Insertar(recorrido2.Nombre)
-			lisHorizontal.Imprimir()
 		}
 
 	}
-	fmt.Println("Vertical")
-	//lisVertical.Imprimir()
 
-	//li.Imprimir()
+
+
 }
 
 func MetodoBusqueda(w http.ResponseWriter,r *http.Request){

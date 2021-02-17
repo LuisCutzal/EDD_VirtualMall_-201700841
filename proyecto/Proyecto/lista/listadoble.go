@@ -16,6 +16,13 @@ func NuevaLista() *Lista  {
 	return &Lista{nil,nil,0}
 }
 
+type Tienda struct {
+	Nombre       string `json:Nombre`
+	Descripcion  string `json:Descripcion`
+	Contacto     string `json:Contacto`
+	Calificacion int `json:Calificacion`
+}
+
 
 //insertar un nodo
 func (m *Lista) Insertar(dato string)  {
@@ -29,14 +36,33 @@ func (m *Lista) Insertar(dato string)  {
 		m.ultimo=nuevo
 	}
 	m.tam++
+
 }
+
+/*
+func (m *Lista) Insertar(dato string)  {
+	nuevo := &nodo{nil,nil,dato}
+	if m.inicio == nil{
+		m.inicio=nuevo
+		m.ultimo=nuevo
+	}else {
+		m.ultimo.siguiente=nuevo
+		nuevo.anterior=m.ultimo
+		m.ultimo=nuevo
+	}
+	m.tam++
+}
+
+*/
+
+
+
 //imprimimos la lista
 func (m *Lista)Imprimir()  {
 	aux:=m.inicio
 	for aux!=nil{
 		//fmt.Print("<-[",aux.contenido,"]->")
 		fmt.Printf("<-[ %s ]->",aux.contenido)
-
 		aux=aux.siguiente
 	}
 	fmt.Println()
