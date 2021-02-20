@@ -8,8 +8,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"../matriz"
 	"../lista"
+	"../ll"
 	"strconv"
 )
 
@@ -31,9 +31,6 @@ type Sobre struct {
 	Datos []Dato
 }
 
-//func main(){
-//	Request()
-//}
 
 func Request() {
 	ruta := mux.NewRouter().StrictSlash(true) //es para enlazar diferentes peticones, get, post, put, delete
@@ -80,49 +77,25 @@ func GetArreglo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(re)
 
-	fmt.Println("Tiendas")
-	i.Imprimir()
-	fmt.Println("Departamentos")
-	ListaX.Imprimir()
-
-	fmt.Println("indice")
-	ListaY.Imprimir()
-	//for _,recorrido:=range re.Datos{
-
-		//json.NewEncoder(w).Encode(recorrido)
-		/*
-		//fmt.Println("Indice:",recorrido.Indice)
-		fmt.Fprintf(w,"Indice: %s\n",recorrido.Indice)
-		for _,recorrido2:=range recorrido.Departamentos{
-			//fmt.Println("Departamento:",recorrido2.Nombre)
-			//fmt.Fprintf(w,"Departamento: %s\n",recorrido2.Nombre)
-			json.NewEncoder(w).Encode(recorrido2.Nombre)
-			for _,recorrido3:=range recorrido2.Tiendas{
-				//fmt.Println("Nombre de la Tienda:",recorrido3.Nombre)
-				fmt.Fprintf(w,"Nombre de la Tienda: %s\n",recorrido3.Nombre)
-				json.NewEncoder(w).Encode(recorrido3.Nombre)
-				//fmt.Println("Descripcion:",recorrido3.Descripcion)
-				//fmt.Fprintf(w,"Descripcion: %s\n",recorrido3.Descripcion)
-				json.NewEncoder(w).Encode(recorrido3.Descripcion)
-				//fmt.Println("Contacto:",recorrido3.Contacto)
-				//fmt.Fprintf(w,"Contacto: %s\n",recorrido3.Contacto)
-				json.NewEncoder(w).Encode(recorrido3.Contacto)
-				//fmt.Println("Calificacion:",recorrido3.Calificacion)
-				//fmt.Fprintf(w,"Calificacion: %d\n",recorrido3.Calificacion)
-				json.NewEncoder(w).Encode(recorrido3.Calificacion)
-				//fmt.Println("Tipo de dato de calificacion:",reflect.TypeOf(recorrido3.Calificacion))
-			}
-		}
-		*/
-	//}
+	//fmt.Println("Tiendas")
+	//i.Imprimir()
+	//fmt.Println("Departamentos")
+	//ListaX.Imprimir()
+	//
+	//fmt.Println("indice")
+	//ListaY.Imprimir()
 
 }
 
-var ListaY =matriz.NuevaLista()
-var ListaX =matriz.NuevaLista()
-var MatrizDatos=matriz.NuevaMatriz()
-var i=lista.NuevaLista()
-var lin int
+//var ListaY =matriz.NuevaLista()
+//var ListaX =matriz.NuevaLista()
+//var MatrizDatos=matriz.NuevaMatriz()
+//var i=lista.NuevaLista()
+//var lin int
+var ListaY = lista.NuevaLista() //lista doblemente enlazada
+var ListaX=lista.NuevaLista() //lista doblemente enlazada
+var ListaDatos=lista.NuevaLista() //lista doblemente enlazada de las tiendas
+var listaDeListas=ll.NuevaLista() //lista de listas para los datos que estaran guardados de las tiendas
 func Recorrido()  {
 	/*
 		crear primero una matriz para el indice (filas) y departamentos(columnas)
@@ -132,24 +105,53 @@ func Recorrido()  {
 		cada 20 posiciones en la matriz (indice * departamentos) creamos una imagen
 	*/
 
-	for indiceY,recorroY:=range re.Datos{
-		ListaY.Insertar(indiceY)
-		for indiceX,recorroX:=range recorroY.Departamentos{
-			ListaX.Insertar(indiceX)
-			for _,recorroMatriz:=range recorroX.Tiendas{
-				i.Insertar(" Nombre: "+recorroMatriz.Nombre+" Descripcion: "+recorroMatriz.Descripcion+" Contacto: "+recorroMatriz.Contacto+" Calificacion: "+ strconv.Itoa(recorroMatriz.Calificacion)+"\n" )
-				//MatrizDatos.Insertar(struct {
-				//	Nombre       string
-				//	Descripcion  string
-				//	Contacto     string
-				//	Calificacion int
-				//}{Nombre: recorroMatriz.Nombre, Descripcion:recorroMatriz.Descripcion , Contacto: recorroMatriz.Contacto, Calificacion:recorroMatriz.Calificacion },indiceX,indiceY)
-				//MatrizDatos.Insertar(Tienda{"sdf","sdf","dsfa",4},indiceX,indiceY)
-
+	//for indiceY,recorroY:=range re.Datos{
+	//	ListaY.Insertar(indiceY,recorroY.Indice)
+	//	for indiceX,recorroX:=range recorroY.Departamentos{
+	//		ListaX.Insertar(indiceX,recorroX.Nombre)
+	//		for _,recorroMatriz:=range recorroX.Tiendas{
+	//			i.Insertar(" Nombre: "+recorroMatriz.Nombre+" Descripcion: "+recorroMatriz.Descripcion+" Contacto: "+recorroMatriz.Contacto+" Calificacion: "+ strconv.Itoa(recorroMatriz.Calificacion)+"\n" )
+	//			//MatrizDatos.Insertar(struct {
+	//			//	Nombre       string
+	//			//	Descripcion  string
+	//			//	Contacto     string
+	//			//	Calificacion int
+	//			//}{Nombre: recorroMatriz.Nombre, Descripcion:recorroMatriz.Descripcion , Contacto: recorroMatriz.Contacto, Calificacion:recorroMatriz.Calificacion },indiceX,indiceY)
+	//			//MatrizDatos.Insertar(Tienda{"sdf","sdf","dsfa",4},indiceX,indiceY)
+	//
+	//		}
+	//
+	//	}
+	//}
+	//array para las columnas
+	var datos Tienda
+	var columnas Dato
+	var filas Departamento
+	var lin,indiceY,indiceX,indiceTiendas int
+	for indiceY,columnas=range re.Datos{
+		ListaY.Insertar(columnas.Indice)
+		fmt.Println("********indice y**********: ", indiceY)
+		for indiceX, filas= range columnas.Departamentos {
+			ListaX.Insertar(filas.Nombre)
+			fmt.Println("indice x: ", indiceX)
+			for indiceTiendas, datos = range filas.Tiendas {
+				ListaDatos.Insertar("Nombre:" + datos.Nombre + ", Descripcion: " + datos.Descripcion + ", Contacto: " + datos.Contacto + ", Calificacion " + strconv.Itoa(datos.Calificacion))
+				listaDeListas.InsertarListaListas(indiceX, datos.Nombre)
+				fmt.Println("indice tiendas: ", indiceTiendas)
+				lin = indiceX + indiceY
+				fmt.Println("row major", lin)
 			}
-
 		}
 	}
+
+	//fmt.Println("listaY")
+	//ListaY.Imprimir()
+	//fmt.Println("lista x")
+	//ListaX.Imprimir()
+	//fmt.Println("lista de datos")
+	//ListaDatos.Imprimir()
+	//fmt.Println("Lista de listas")
+	//listaDeListas.Print()
 
 }
 
