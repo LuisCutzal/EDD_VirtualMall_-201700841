@@ -26,6 +26,7 @@ func main() {
 	//otro.InsertarListaListas(1,"si1.1")
 	//otro.InsertarListaListas(2,"si2.0")
 	//otro.InsertarListaListas(5,"si5.0")
+	//otro.InsertarListaListas(6,"") //funciona
 	//otro.Print()
 
 

@@ -2,15 +2,14 @@ package servidor
 //package main
 
 import (
+	"../lista"
+	"../ll"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"../lista"
-	"../ll"
-	"strconv"
 )
 
 type Tienda struct {
@@ -21,7 +20,7 @@ type Tienda struct {
 }
 type Departamento struct {
 	Nombre  string `json:Nombre`
-	Tiendas []Tienda`json:Tiendas`
+	Tiendas []Tienda
 }
 type Dato struct {
 	Indice string `json:Indice`
@@ -54,7 +53,6 @@ func MetodoPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w,"Error al cargar el archivo")
 	}else{
 		json.Unmarshal(body, &re)
-		//Recorrido()
 	}
 	json.NewEncoder(w).Encode(re) //mostrá los datos en postman
 
@@ -77,21 +75,8 @@ func GetArreglo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(re)
 
-	//fmt.Println("Tiendas")
-	//i.Imprimir()
-	//fmt.Println("Departamentos")
-	//ListaX.Imprimir()
-	//
-	//fmt.Println("indice")
-	//ListaY.Imprimir()
 
 }
-
-//var ListaY =matriz.NuevaLista()
-//var ListaX =matriz.NuevaLista()
-//var MatrizDatos=matriz.NuevaMatriz()
-//var i=lista.NuevaLista()
-//var lin int
 var ListaY = lista.NuevaLista() //lista doblemente enlazada
 var ListaX=lista.NuevaLista() //lista doblemente enlazada
 var ListaDatos=lista.NuevaLista() //lista doblemente enlazada de las tiendas
@@ -104,54 +89,53 @@ func Recorrido()  {
 		la lista de las tiendas va ordenada
 		cada 20 posiciones en la matriz (indice * departamentos) creamos una imagen
 	*/
-
-	//for indiceY,recorroY:=range re.Datos{
-	//	ListaY.Insertar(indiceY,recorroY.Indice)
-	//	for indiceX,recorroX:=range recorroY.Departamentos{
-	//		ListaX.Insertar(indiceX,recorroX.Nombre)
-	//		for _,recorroMatriz:=range recorroX.Tiendas{
-	//			i.Insertar(" Nombre: "+recorroMatriz.Nombre+" Descripcion: "+recorroMatriz.Descripcion+" Contacto: "+recorroMatriz.Contacto+" Calificacion: "+ strconv.Itoa(recorroMatriz.Calificacion)+"\n" )
-	//			//MatrizDatos.Insertar(struct {
-	//			//	Nombre       string
-	//			//	Descripcion  string
-	//			//	Contacto     string
-	//			//	Calificacion int
-	//			//}{Nombre: recorroMatriz.Nombre, Descripcion:recorroMatriz.Descripcion , Contacto: recorroMatriz.Contacto, Calificacion:recorroMatriz.Calificacion },indiceX,indiceY)
-	//			//MatrizDatos.Insertar(Tienda{"sdf","sdf","dsfa",4},indiceX,indiceY)
-	//
-	//		}
-	//
-	//	}
-	//}
-	//array para las columnas
-	var datos Tienda
+	var datosTienda Tienda
 	var columnas Dato
 	var filas Departamento
-	var lin,indiceY,indiceX,indiceTiendas int
+	var indiceY,indiceX,indiceTiendas int
 	for indiceY,columnas=range re.Datos{
-		ListaY.Insertar(columnas.Indice)
-		fmt.Println("********indice y**********: ", indiceY)
-		for indiceX, filas= range columnas.Departamentos {
-			ListaX.Insertar(filas.Nombre)
-			fmt.Println("indice x: ", indiceX)
-			for indiceTiendas, datos = range filas.Tiendas {
-				ListaDatos.Insertar("Nombre:" + datos.Nombre + ", Descripcion: " + datos.Descripcion + ", Contacto: " + datos.Contacto + ", Calificacion " + strconv.Itoa(datos.Calificacion))
-				listaDeListas.InsertarListaListas(indiceX, datos.Nombre)
-				fmt.Println("indice tiendas: ", indiceTiendas)
-				lin = indiceX + indiceY
-				fmt.Println("row major", lin)
+		if columnas.Indice!=""{
+			ListaY.Insertar(re.Datos[indiceY].Indice)
+			for indiceX, filas = range columnas.Departamentos{
+				if filas.Nombre!=""{
+					ListaX.Insertar(columnas.Departamentos[indiceX].Nombre)
+					for indiceTiendas,datosTienda =range filas.Tiendas{
+						if datosTienda.Nombre!=""{
+							if datosTienda.Calificacion<=0 || filas.Tiendas[indiceTiendas].Calificacion>5{
+								fmt.Printf("Error, la calificacion de la tienda %s debe ser mayor a 0 y menor a 6 \n",datosTienda.Nombre)
+							}else if datosTienda.Calificacion==1{
+								ListaDatos.Insertar(datosTienda.Nombre)
+								listaDeListas.InsertarListaListas(indiceX*indiceX+indiceY,datosTienda.Nombre)
+								//fmt.Println("calificacion igual a 1")
+							}else if datosTienda.Calificacion==2{
+								ListaDatos.Insertar(datosTienda.Nombre)
+								listaDeListas.InsertarListaListas((indiceX*(indiceY+1)+(indiceY+1)),datosTienda.Nombre)
+								//fmt.Println("calificacion igual a 2")
+							}else if datosTienda.Calificacion==3{
+								ListaDatos.Insertar(datosTienda.Nombre)
+								listaDeListas.InsertarListaListas((indiceX*(indiceY+2)+(indiceY+2)),datosTienda.Nombre)
+								//fmt.Println("calificacion igual a 3")
+							}else if datosTienda.Calificacion==4{
+								ListaDatos.Insertar(datosTienda.Nombre)
+								listaDeListas.InsertarListaListas((indiceX*(indiceY+3)+(indiceY+3)),datosTienda.Nombre)
+								//fmt.Println("calificacion igual a 4")
+							}else if datosTienda.Calificacion==5{
+								ListaDatos.Insertar(datosTienda.Nombre)
+								listaDeListas.InsertarListaListas((indiceX*(indiceY+4)+(indiceY+4)),datosTienda.Nombre)
+								//fmt.Println("calificacion igual a 5")
+							}
+						}
+					}
+				}else{
+					fmt.Println("Error, no existe un departamento")
+				}
 			}
+		}else{
+			fmt.Println("Error, no existe un indice")
 		}
 	}
-
-	//fmt.Println("listaY")
-	//ListaY.Imprimir()
-	//fmt.Println("lista x")
-	//ListaX.Imprimir()
-	//fmt.Println("lista de datos")
-	//ListaDatos.Imprimir()
-	//fmt.Println("Lista de listas")
-	//listaDeListas.Print()
+	fmt.Println("Lista de listas")
+	listaDeListas.Print()
 
 }
 
