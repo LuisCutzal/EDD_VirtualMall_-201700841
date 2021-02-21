@@ -89,56 +89,60 @@ func Recorrido()  {
 		la lista de las tiendas va ordenada
 		cada 20 posiciones en la matriz (indice * departamentos) creamos una imagen
 	*/
-	var datosTienda Tienda
-	var columnas Dato
-	var filas Departamento
-	var indiceY,indiceX,indiceTiendas int
-	for indiceY,columnas=range re.Datos{
-		if columnas.Indice!=""{
+	//var datosTienda Tienda
+	var columnas Departamento
+	var filas Dato
+	var indiceY, indiceX int
+	contadorx :=0
+	contadory:=0
+	contadorx2:=0
+	var arreglo [10]int
+	for indiceY,filas=range re.Datos{
+		fmt.Println("indice y",indiceY)
+		if filas.Indice!=""{
 			ListaY.Insertar(re.Datos[indiceY].Indice)
-			for indiceX, filas = range columnas.Departamentos{
-				if filas.Nombre!=""{
-					ListaX.Insertar(columnas.Departamentos[indiceX].Nombre)
-					for indiceTiendas,datosTienda =range filas.Tiendas{
-						if datosTienda.Nombre!=""{
-							if datosTienda.Calificacion<=0 || filas.Tiendas[indiceTiendas].Calificacion>5{
-								fmt.Printf("Error, la calificacion de la tienda %s debe ser mayor a 0 y menor a 6 \n",datosTienda.Nombre)
-							}else if datosTienda.Calificacion==1{
-								ListaDatos.Insertar(datosTienda.Nombre)
-								listaDeListas.InsertarListaListas(indiceX*indiceX+indiceY,datosTienda.Nombre)
-								//fmt.Println("calificacion igual a 1")
-							}else if datosTienda.Calificacion==2{
-								ListaDatos.Insertar(datosTienda.Nombre)
-								listaDeListas.InsertarListaListas((indiceX*(indiceY+1)+(indiceY+1)),datosTienda.Nombre)
-								//fmt.Println("calificacion igual a 2")
-							}else if datosTienda.Calificacion==3{
-								ListaDatos.Insertar(datosTienda.Nombre)
-								listaDeListas.InsertarListaListas((indiceX*(indiceY+2)+(indiceY+2)),datosTienda.Nombre)
-								//fmt.Println("calificacion igual a 3")
-							}else if datosTienda.Calificacion==4{
-								ListaDatos.Insertar(datosTienda.Nombre)
-								listaDeListas.InsertarListaListas((indiceX*(indiceY+3)+(indiceY+3)),datosTienda.Nombre)
-								//fmt.Println("calificacion igual a 4")
-							}else if datosTienda.Calificacion==5{
-								ListaDatos.Insertar(datosTienda.Nombre)
-								listaDeListas.InsertarListaListas((indiceX*(indiceY+4)+(indiceY+4)),datosTienda.Nombre)
-								//fmt.Println("calificacion igual a 5")
-							}
-						}
-					}
+			contadory++
+			for indiceX, columnas = range filas.Departamentos{
+				fmt.Println("indicex",indiceX)
+				if columnas.Nombre!=""{
+					ListaX.Insertar(columnas.Nombre)
+					contadorx+=5
+					arreglo[indiceY]=indiceX
 				}else{
 					fmt.Println("Error, no existe un departamento")
+					contadorx2++
 				}
 			}
 		}else{
 			fmt.Println("Error, no existe un indice")
 		}
 	}
+	fmt.Println("arreglo",arreglo)
+
+	//for i:=0;i<=len(arreglo);i++{
+	//	if arreglo[i]<=arreglo[i]{
+	//		fmt.Println("arreglo", arreglo[i])
+	//	}
+	//}
+
+	for i:=0;i<=indiceY;i++{
+		for j:=0;j<=(contadorx);j++{
+			linealizacion:=i*(contadorx)+(j)
+			listaDeListas.InsertarListaListas(linealizacion,"dsdf")
+			fmt.Println("filas",i)
+			fmt.Println("columnas",j)
+			fmt.Println("Linealizacion",linealizacion)
+
+		}
+
+	}
+	fmt.Println("Contadorx: ",contadorx)
 	fmt.Println("Lista de listas")
 	listaDeListas.Print()
+	fmt.Println("contadorx2")
 
 }
-
+var re2 Dato
 func MetodoBusqueda(w http.ResponseWriter,r *http.Request){
 	/*
 	Para este reporte el usuario realizará una solicitud especificando los tres
@@ -154,8 +158,33 @@ func MetodoBusqueda(w http.ResponseWriter,r *http.Request){
 	como el ejemplo mostrado con anterioridad, y la dirección o URL exacta es :
 	localhost:puerto/TiendaEspecifica.
 	*/
+	body, err := ioutil.ReadAll(r.Body)
+	if err !=nil{
+		fmt.Fprintf(w,"Error al cargar el archivo")
+	}else{
+		json.Unmarshal(body, &re2)
+	}
+	//mostrá los datos en postman
+	//bandera:=false
+	//for i,indices:=range re2.Datos{
+	//	for d,departamentos:=range indices.Departamentos{
+	//		bandera=true
+	//		if bandera==true{
+	//			if re.Datos[i].Departamentos[d].Nombre==departamentos.Nombre{
+	//				//ListaX.Buscar(indices.Departamentos[s].Nombre)
+	//				fmt.Println("dep",departamentos.Nombre)
+	//			}
+	//
+	//		}
+	//
+	//	}
+	//}
 
-
+	for _,departamentos:=range re2.Departamentos{
+		if re.Datos[0].Departamentos[0].Nombre==departamentos.Nombre{
+			fmt.Println("dep",departamentos.Nombre)
+		}
+	}
 }
 
 
